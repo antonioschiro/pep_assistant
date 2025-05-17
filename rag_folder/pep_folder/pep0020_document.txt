@@ -1,0 +1,820 @@
+
+
+
+
+PEP 20 – The Zen of Python | peps.python.org
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Following system colour scheme
+
+
+
+
+
+
+Selected dark colour scheme
+
+
+
+
+
+
+Selected light colour scheme
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Python Enhancement Proposals
+
+Python » 
+PEP Index » 
+PEP 20
+
+
+
+
+
+Toggle light / dark / auto colour theme
+
+
+
+
+PEP 20 – The Zen of Python
+
+Author:
+Tim Peters <tim.peters at gmail.com>
+Status:
+Active
+Type:
+Informational
+Created:
+19-Aug-2004
+Post-History:
+22-Aug-2004
+
+
+
+Table of Contents
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+
+
+Abstract
+Long time Pythoneer Tim Peters succinctly channels the BDFL’s guiding
+principles for Python’s design into 20 aphorisms, only 19 of which
+have been written down.
+
+
+The Zen of Python
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+
+
+
+
+Easter Egg
+>>> import this
+
+
+
+
+References
+Originally posted to comp.lang.python/python-list@python.org under a
+thread called “The Way of Python”
+
+
+Copyright
+This document has been placed in the public domain.
+
+
+
+Source: https://github.com/python/peps/blob/main/peps/pep-0020.rst
+Last modified: 2025-02-01 08:55:40 GMT
+
+
+Contents
+
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+
+Page Source (GitHub)
+
+
+
+
+
+
+
+
+
+
+PEP 20 – The Zen of Python | peps.python.org
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PEP 20 – The Zen of Python | peps.python.org
+
+
+Following system colour scheme
+
+
+
+
+
+
+Selected dark colour scheme
+
+
+
+
+
+
+Selected light colour scheme
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Python Enhancement Proposals
+
+Python » 
+PEP Index » 
+PEP 20
+
+
+
+
+
+Toggle light / dark / auto colour theme
+
+
+
+
+PEP 20 – The Zen of Python
+
+Author:
+Tim Peters <tim.peters at gmail.com>
+Status:
+Active
+Type:
+Informational
+Created:
+19-Aug-2004
+Post-History:
+22-Aug-2004
+
+
+
+Table of Contents
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+
+
+Abstract
+Long time Pythoneer Tim Peters succinctly channels the BDFL’s guiding
+principles for Python’s design into 20 aphorisms, only 19 of which
+have been written down.
+
+
+The Zen of Python
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+
+
+
+
+Easter Egg
+>>> import this
+
+
+
+
+References
+Originally posted to comp.lang.python/python-list@python.org under a
+thread called “The Way of Python”
+
+
+Copyright
+This document has been placed in the public domain.
+
+
+
+Source: https://github.com/python/peps/blob/main/peps/pep-0020.rst
+Last modified: 2025-02-01 08:55:40 GMT
+
+
+Contents
+
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+
+Page Source (GitHub)
+
+
+
+
+
+
+
+
+Following system colour scheme
+
+
+
+
+
+
+Selected dark colour scheme
+
+
+
+
+
+
+Selected light colour scheme
+
+
+
+
+
+
+
+
+
+
+
+
+
+Following system colour scheme
+
+
+
+
+Following system colour scheme
+
+
+
+Selected dark colour scheme
+
+
+
+
+Selected dark colour scheme
+
+
+
+Selected light colour scheme
+
+
+
+
+
+
+
+
+
+
+
+Selected light colour scheme
+
+
+
+
+
+
+
+
+
+
+
+        document.documentElement.dataset.colour_scheme = localStorage.getItem("colour_scheme") || "auto"
+    
+
+Python Enhancement Proposals
+
+Python » 
+PEP Index » 
+PEP 20
+
+
+
+
+
+Toggle light / dark / auto colour theme
+
+
+
+
+PEP 20 – The Zen of Python
+
+Author:
+Tim Peters <tim.peters at gmail.com>
+Status:
+Active
+Type:
+Informational
+Created:
+19-Aug-2004
+Post-History:
+22-Aug-2004
+
+
+
+Table of Contents
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+
+
+Abstract
+Long time Pythoneer Tim Peters succinctly channels the BDFL’s guiding
+principles for Python’s design into 20 aphorisms, only 19 of which
+have been written down.
+
+
+The Zen of Python
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+
+
+
+
+Easter Egg
+>>> import this
+
+
+
+
+References
+Originally posted to comp.lang.python/python-list@python.org under a
+thread called “The Way of Python”
+
+
+Copyright
+This document has been placed in the public domain.
+
+
+
+Source: https://github.com/python/peps/blob/main/peps/pep-0020.rst
+Last modified: 2025-02-01 08:55:40 GMT
+
+
+Contents
+
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+
+Page Source (GitHub)
+
+
+Python Enhancement Proposals
+
+Python » 
+PEP Index » 
+PEP 20
+
+
+
+
+
+Toggle light / dark / auto colour theme
+
+Python Enhancement Proposals
+Python » 
+PEP Index » 
+PEP 20
+Python » PythonPEP Index » PEP IndexPEP 20
+
+
+
+Toggle light / dark / auto colour theme
+Toggle light / dark / auto colour theme
+
+PEP 20 – The Zen of Python
+
+Author:
+Tim Peters <tim.peters at gmail.com>
+Status:
+Active
+Type:
+Informational
+Created:
+19-Aug-2004
+Post-History:
+22-Aug-2004
+
+
+
+Table of Contents
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+
+
+Abstract
+Long time Pythoneer Tim Peters succinctly channels the BDFL’s guiding
+principles for Python’s design into 20 aphorisms, only 19 of which
+have been written down.
+
+
+The Zen of Python
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+
+
+
+
+Easter Egg
+>>> import this
+
+
+
+
+References
+Originally posted to comp.lang.python/python-list@python.org under a
+thread called “The Way of Python”
+
+
+Copyright
+This document has been placed in the public domain.
+
+
+
+Source: https://github.com/python/peps/blob/main/peps/pep-0020.rst
+Last modified: 2025-02-01 08:55:40 GMT
+
+PEP 20 – The Zen of Python
+
+Author:
+Tim Peters <tim.peters at gmail.com>
+Status:
+Active
+Type:
+Informational
+Created:
+19-Aug-2004
+Post-History:
+22-Aug-2004
+
+
+
+Table of Contents
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+
+
+Abstract
+Long time Pythoneer Tim Peters succinctly channels the BDFL’s guiding
+principles for Python’s design into 20 aphorisms, only 19 of which
+have been written down.
+
+
+The Zen of Python
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+
+
+
+
+Easter Egg
+>>> import this
+
+
+
+
+References
+Originally posted to comp.lang.python/python-list@python.org under a
+thread called “The Way of Python”
+
+
+Copyright
+This document has been placed in the public domain.
+
+PEP 20 – The Zen of Python
+Author:
+Tim Peters <tim.peters at gmail.com>
+Status:
+Active
+Type:
+Informational
+Created:
+19-Aug-2004
+Post-History:
+22-Aug-2004
+Author::Tim Peters <tim.peters at gmail.com>Status::ActiveActiveType::InformationalInformationalCreated::19-Aug-2004Post-History::22-Aug-2004
+Table of Contents
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+Table of Contents
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+Table of Contents
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+AbstractAbstractThe Zen of PythonThe Zen of PythonEaster EggEaster EggReferencesReferencesCopyrightCopyright
+Abstract
+Long time Pythoneer Tim Peters succinctly channels the BDFL’s guiding
+principles for Python’s design into 20 aphorisms, only 19 of which
+have been written down.
+AbstractAbstractLong time Pythoneer Tim Peters succinctly channels the BDFL’s guiding
+principles for Python’s design into 20 aphorisms, only 19 of which
+have been written down.
+The Zen of Python
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+
+
+The Zen of PythonThe Zen of PythonBeautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+Beautiful is better than ugly.
+Explicit is better than implicit.
+Simple is better than complex.
+Complex is better than complicated.
+Flat is better than nested.
+Sparse is better than dense.
+Readability counts.
+Special cases aren't special enough to break the rules.
+Although practicality beats purity.
+Errors should never pass silently.
+Unless explicitly silenced.
+In the face of ambiguity, refuse the temptation to guess.
+There should be one-- and preferably only one --obvious way to do it.
+Although that way may not be obvious at first unless you're Dutch.
+Now is better than never.
+Although never is often better than *right* now.
+If the implementation is hard to explain, it's a bad idea.
+If the implementation is easy to explain, it may be a good idea.
+Namespaces are one honking great idea -- let's do more of those!
+
+Easter Egg
+>>> import this
+
+
+Easter EggEaster Egg>>> import this
+
+>>> import this
+>>> import this
+>>> import this
+References
+Originally posted to comp.lang.python/python-list@python.org under a
+thread called “The Way of Python”
+ReferencesReferencesOriginally posted to comp.lang.python/python-list@python.org under a
+thread called “The Way of Python”comp.lang.python/python-list@python.org..@.“The Way of Python”
+Copyright
+This document has been placed in the public domain.
+CopyrightCopyrightThis document has been placed in the public domain.Source: https://github.com/python/peps/blob/main/peps/pep-0020.rsthttps://github.com/python/peps/blob/main/peps/pep-0020.rstLast modified: 2025-02-01 08:55:40 GMT2025-02-01 08:55:40 GMT
+Contents
+
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+
+
+Page Source (GitHub)
+Contents
+Abstract
+The Zen of Python
+Easter Egg
+References
+Copyright
+AbstractAbstractThe Zen of PythonThe Zen of PythonEaster EggEaster EggReferencesReferencesCopyrightCopyrightPage Source (GitHub)

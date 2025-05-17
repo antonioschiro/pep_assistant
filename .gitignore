@@ -1,0 +1,10 @@
+# Ignore .env
+.env
+# Ignore virtual env
+venv
+# Ignore bin files
+*.bin
+# Ignore pickle file
+*.pickle
+# Ignore pycache folders
+__pycache__
