@@ -126,24 +126,26 @@ class TestType(Enum):
     GROUNDNESS = "Evaluate the groundness of the answers."
     
 def execute_test_suite(test_type:list[TestType]) -> None:
+    try:
+        for test in test_type:       
+            if test == TestType.CORRECTNESS:
+                print("Correctness tests launch started.")
+                evaluate(
+                    predict_rag_answer,
+                    data = dataset_name,
+                    evaluators = [correctness_evaluator, style_evaluator],
+                    experiment_prefix= "correctness_test",
+                )
+                print("Correctness tests terminated.")
 
-    for test in test_type:       
-        if test == TestType.CORRECTNESS:
-            print("Correctness tests launch started.")
-            correctness_experiment_results = evaluate(
-                predict_rag_answer,
-                data = dataset_name,
-                evaluators = [correctness_evaluator, style_evaluator],
-                experiment_prefix= "correctness_test",
-            )
-            print("Correctness tests terminated.")
-        
-        if test == TestType.GROUNDNESS:
-            print("Groundness tests launch started.")
-            hallucinations_experiment_results = evaluate(
-                predict_rag_context_response,
-                data = dataset_name,
-                evaluators = [hallucinations_evaluator],
-                experiment_prefix= "hallucination_test"
-            )
-            print("Groundness tests terminated.")
+            if test == TestType.GROUNDNESS:
+                print("Groundness tests launch started.")
+                evaluate(
+                    predict_rag_context_response,
+                    data = dataset_name,
+                    evaluators = [hallucinations_evaluator],
+                    experiment_prefix= "hallucination_test"
+                )
+                print("Groundness tests terminated.")
+    except Exception as e:
+        print(f"An unknown exception occurred:\n{e}")

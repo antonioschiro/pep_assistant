@@ -15,14 +15,16 @@ def create_dataset(dataset_name:str, dataset_description:str):
     )
     return dataset
 
-def update_dataset(inputs:list, outputs:list, dataset_name:str = dataset_name, dataset_id:str = dataset_id): 
+def update_dataset(inputs:list, outputs:list, dataset_id:str = dataset_id): 
     try:
-        dataset = client.read_dataset(dataset_id= dataset_id)
-        # Check for duplicates
-        # Update dataset
+        # Create examples
+        examples = [{"inputs": {"question": inp}, "outputs": {"answer": out}} for inp, out in zip(inputs, outputs)]
+        # Add examples to dataset
         client.create_examples(
-            inputs = [{"question": q} for q in inputs],
-            outputs = [{"answer": a} for a in outputs],
-            )
+            dataset_id=dataset_id,
+            examples=examples,
+        )
     except LangSmithNotFoundError:
         print("No dataset found.")
+    except Exception as e:
+        print(f"An unkown error occurred: {e}")
