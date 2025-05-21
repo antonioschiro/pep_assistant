@@ -93,7 +93,7 @@ reference_responses = [
     "def outer(a):\n    def inner(b):\n        return a + b\n\n    return inner(5)",
 
     # 10. Full class rewrite with proper naming, spacing, docstring
-    "class Employee(Person):\n    def __init__(self, name):\n        super().__init__(name)\n        self.employee_id = 0\n\n    def show(self):\n        print(self.employee_id)"
+    "class Employee(Person):\n    def __init__(self, name):\n        super().__init__(name)\n        self.employee_id = 0\n\n    def show(self):\n        print(self.employee_id)",
 
     # 11. Added type hints, renamed function, improved readability with clearer loop structure.
     "def replace_zeros_with_none(matrix: list[list[int]]) -> None:\n    for row in matrix:\n        for i, value in enumerate(row):\n            if value == 0:\n                row[i] = None",
