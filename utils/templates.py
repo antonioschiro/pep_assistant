@@ -5,6 +5,8 @@ The document can be defined as **relevant** if it meets **at least one** of thes
 - It contains one or more rules that you could apply to the user code.
 - It contains one or more code snippets that demonstrate improvements or corrections applicable to the user code.
 
+Reason explicitly about whether the retrieved document can be used for improve the user code.
+
 Below are examples:
 
 Example 1:
@@ -186,8 +188,10 @@ Below you will find examples of well-written Pythonic code snippets from the mos
 You need to improve the user input code:
 {code}
 
-If you can't improve the code because everything is fine or for any other reason, just respond by returning **only** the input code.
-Otherwise, respond by returning **only** the corrected code, without any additional string or information.'''
+Think step by step about how to make the user code cleaner and pythonic using rules and code snippets provided.
+Then, generate the improved code.
+If you can't improve the user code because everything is fine or for any other reason, just respond by returning **only** the input code.
+Otherwise, respond by returning **only** the improved code, without **any** additional string, information or markdown formatting.'''
 
 # Potential hallucinations evaluator prompt
 hallucinations_template = '''You are an evaluator assessing whether the generated code is hallucinated or not 
@@ -197,7 +201,7 @@ Definitions:
 - The code is **hallucinated** if it directly contradicts the context, introduces rules or patterns that are unsupported, or deviates significantly from provided guidance.
 - The code is **grounded** if it is consistent with, inspired by, or reasonably aligned with any part of the context — even if not a perfect match.
 
-Use your best judgment to decide if the generated code is generally supported by the context or not.
+Reason explicitly to decide whether the generated code is generally supported by the context or not.
 
 Generated code:
 {response}
@@ -223,6 +227,7 @@ Here is the generated code:
 This is the user input code:
 {code}
 
+Reason explicitly about whether the generated code is a complete answer to the user input code.
 Respond **only** in the following JSON format:
 -If the response is complete return: {{"score": true}}
 -If the response is incomplete return: {{"score": false}}
