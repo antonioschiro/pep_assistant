@@ -21,12 +21,15 @@ def pythonize_code(code:str) -> dict:
     try:
         response = compiled_graph.invoke({"code_question": code, "iterations": 0, "answer_state": AnswerState.NOT_GENERATED})
         print(response) 
-        return {"answer": response["generated_response"]}
+        answer = response.get("generated_response")
+        return {"answer": answer}
+    except KeyError:
+        print(f"Answer not generated. More info:\n{e}")
     except RateLimitError as ratelimit_except:
         print(f"Requests rate limit reached for this model {llm.model_name}:\nError details:\n{ratelimit_except}")
     except Exception as e:
         print(f"An unknown exception occurred:\n{e}")
 
 if __name__ == "__main__":
-    input_code = input("Insert here your Python code: ")
+    input_code = input("Insert your code here: ")
     pythonize_code(input_code)

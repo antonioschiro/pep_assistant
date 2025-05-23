@@ -47,6 +47,7 @@ class AnswerState(Enum):
     NOT_COMPLETE= "not complete"
     COMPLETE= "complete"
     NOT_GENERATED= "not generated"
+    GENERATED= "generated"
 
 class State(TypedDict):
     code_question: Annotated[str, "The code to be reviewed."]
@@ -138,7 +139,8 @@ def generate(state: State):
                     | llm
                     | StrOutputParser())
     response = rag_pipeline.invoke({'code': code_question, 'rules':rules, 'code_snippets':code_snippets})
-    return {"generated_response": response, "iterations": iterations}
+    answer_state = AnswerState.GENERATED
+    return {"generated_response": response, "iterations": iterations, "answer_state": answer_state}
 
 def check_response(state: State):
     code_question=state['code_question']
@@ -147,10 +149,10 @@ def check_response(state: State):
     context = '\n'.join(doc.page_content for doc in retrieved_documents)
     # Hallucination chain
     hallucinations_evaluator_chain = (PromptTemplate.from_template(hallucinations_template)
-    | llm.with_structured_output(HallucinationEvaluator))
+    | llm.with_structured_output(HallucinationEvaluator, method="json_mode"))
     # Completeness chain
     completeness_evaluator_chain = (PromptTemplate.from_template(completeness_template)
-    | llm.with_structured_output(CompletenessEvaluator))
+    | llm.with_structured_output(CompletenessEvaluator,  method="json_mode"))
     # Check for hallucinations
     is_response_hallucinated= hallucinations_evaluator_chain.invoke({"context": context, "response": response})
     if is_response_hallucinated.score:
