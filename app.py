@@ -20,8 +20,9 @@ def pythonize_code(code:str) -> dict:
     """
     try:
         response = compiled_graph.invoke({"code_question": code, "iterations": 0, "answer_state": AnswerState.NOT_GENERATED})
-        print(response) 
+        print(response)
         answer = response.get("generated_response")
+
         return {"answer": answer}
     except KeyError:
         print(f"Answer not generated. More info:\n{e}")
@@ -31,5 +32,5 @@ def pythonize_code(code:str) -> dict:
         print(f"An unknown exception occurred:\n{e}")
 
 if __name__ == "__main__":
-    input_code = input("Insert your code here: ")
+    input_code = input("Enter the code to be pythonized: ")
     pythonize_code(input_code)

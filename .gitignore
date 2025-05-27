@@ -1,7 +1,8 @@
 # Ignore .env
 .env
+.vscode
 # Ignore virtual env
-venv
+myenv
 # Ignore bin files
 *.bin
 # Ignore pickle file

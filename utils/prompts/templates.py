@@ -78,7 +78,8 @@ User Code:
 Respond **only** in the following JSON format:
 
 - If document is relevant: {{"score": true}}
-- If document is not relevant: {{"score": false}}'''
+- If document is not relevant: {{"score": false}}
+'''
 
 # Generating response prompt
 generate_response_template = '''
@@ -188,10 +189,11 @@ Below you will find examples of well-written Pythonic code snippets from the mos
 You need to improve the user input code:
 {code}
 
-Think step by step about how to make the user code cleaner and pythonic using rules and code snippets provided.
-Then, generate the improved code.
-If you can't improve the user code because everything is fine or for any other reason, just respond by returning **only** the input code.
-Otherwise, respond by returning **only** the improved code, without **any** additional string, information or markdown formatting.'''
+Then, output **only** the improved Python code.
+Do NOT output any explanation, reasoning, tags like <think>, or markdown formatting.
+Your response must be the code **only**, in raw plain text.
+'''
+#Think step by step about how to make the user code cleaner and pythonic using rules and code snippets provided.
 
 # Potential hallucinations evaluator prompt
 hallucinations_template = '''You are an evaluator assessing whether the generated code is hallucinated or not 
@@ -211,7 +213,8 @@ Context (rules, style guide, examples):
 
 Respond **only** in the following JSON format:
 -If the response is hallucinated return: {{"score": true}}
--If the response is grounded return: {{"score": false}}'''
+-If the response is grounded return: {{"score": false}}
+'''
 
 # Answers completeness evaluator prompt
 completeness_template = '''You are an evaluator assessing the completeness of the generated code

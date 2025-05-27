@@ -1,23 +1,38 @@
 from dotenv import load_dotenv
 load_dotenv()
 import os
+import re
 from langchain_core.output_parsers.string import StrOutputParser
 from langchain.prompts import PromptTemplate
 from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_groq import ChatGroq
+from langchain_ollama.llms import OllamaLLM
+
+from langchain_community.chat_models import ChatOllama
+#from langchain.output_parsers import PydanticOutputParser
+
+#from langchain_groq import ChatGroq
 from pydantic import BaseModel, Field
 from langchain_core.documents import Document
 from typing import List, Annotated
 from typing_extensions import TypedDict
 from enum import Enum
-from utils.templates import retrieved_document_template, generate_response_template, hallucinations_template, completeness_template, retry_generate_template
+from utils.evaluators import (documents_evaluator_chain,
+                                hallucinations_evaluator_chain,
+                                completeness_evaluator_chain,
+                                rag_pipeline,
+                                retry_rag_pipeline,
+                                )
+
+
 # Set the key TOKENIZERS_PARALLELISM to avoid deadlocks
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 # Antropic APIKey
 os.environ["GROQ_API_KEY"] = os.getenv("CHATGROQ_APIKEY")
 # Initialize LLM
-llm = ChatGroq(model="meta-llama/llama-4-scout-17b-16e-instruct", temperature=0.0, max_retries=2)
+code_llm = OllamaLLM(model="qwen3:4b", temperature=0.)
+llm = ChatOllama(model="qwen3:4b", temperature=0.)
+#llm = ChatGroq(model="meta-llama/llama-4-scout-17b-16e-instruct", temperature=0.0, max_retries=2)
 # Defining embeddings generator
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 # Loading vector stores
@@ -25,20 +40,6 @@ guidelines_vectorstore = Chroma(persist_directory="./rag_folder/pep_folder", emb
 snippets_code_vectorstore = Chroma(persist_directory="./rag_folder/codes_folder", embedding_function=embeddings)
 # Setting a global variable to limit the number of iterations:
 max_iterations = 3
-
-# Defining evaluators format outputs for Self-RAG
-class RetrievedDocumentEvaluator(BaseModel):
-    """Evaluates if a retrieved document is relevant for improving code."""
-    score: bool = Field(description= "Relevance of document to the code. True or False.")
-
-class HallucinationEvaluator(BaseModel):
-    """Evaluates if response generated is affected by hallucinations or none."""
-    score: bool = Field(description= '''Hallucination score. 
-                        True if LLM is hallucinating, False if the answer is grounded.''')
-
-class CompletenessEvaluator(BaseModel):
-    score: bool = Field(description = '''Completeness score.
-                        True if the response fully answers to the question. False otherwise.''')
 
 # Defining state graph
 # Instanciate an Enum class for answer_state key.
@@ -87,24 +88,19 @@ def retrieve(state: State):
     retrieved_documents=[doc for doc in guidelines_documents+snippets_documents]
     return {"retrieved_documents": retrieved_documents}
 
-def evaluate(state: State):
+def evaluate(state: State, documents_evaluator_chain = documents_evaluator_chain):
     '''This function checks whether the documents retrieved are useful or not to fix the code.
     It returns the updated key state["retrieved_documents"] with relevant docs only.'''
     code_question = state['code_question']
     retrieved_documents = state['retrieved_documents']
     relevant_docs= []
-    # Create prompt from template and feed LLM with it
-    evaluation_prompt = PromptTemplate.from_template(retrieved_document_template)
-    # Document evaluator chain
-    documents_evaluator_chain = (evaluation_prompt
-    | llm.with_structured_output(RetrievedDocumentEvaluator))
     for doc in retrieved_documents:
         is_relevant = documents_evaluator_chain.invoke({"code": code_question, "document": doc.page_content})
         if is_relevant.score:
             relevant_docs.append(doc)
     return {"retrieved_documents": relevant_docs}
 
-def generate(state: State):
+def generate(state: State, rag_pipeline = rag_pipeline, retry_rag_pipeline = retry_rag_pipeline):
     '''This function takes in input the state object.
     It updates the state keys "generated_response" and "iterations" with the generated code and the iteration number respectively.
     '''
@@ -126,33 +122,24 @@ def generate(state: State):
     # Retry generation flow in case of hallucinated answer 
     if answer_state == AnswerState.HALLUCINATED:
         hallucinated_response = state['generated_response']
-        prompt = PromptTemplate.from_template(generate_response_template + retry_generate_template)
-        rag_pipeline = (prompt
-                    | llm
-                    | StrOutputParser())
-        response = rag_pipeline.invoke({'code':code_question, 'rules':rules, 'code_snippets':code_snippets, 'hallucinated_response': hallucinated_response})
+        response = retry_rag_pipeline.invoke({'code':code_question, 'rules':rules, 'code_snippets':code_snippets, 'hallucinated_response': hallucinated_response})
+        match = re.search(r'(?s)</think>\s*(.*)', response)
+        response = match.group(1).strip() if match else response.strip()
         return {"generated_response": response, "iterations": iterations}    
     # Main flow
     # Defining prompt for the main flow
-    prompt = PromptTemplate.from_template(generate_response_template)
-    rag_pipeline = (prompt
-                    | llm
-                    | StrOutputParser())
     response = rag_pipeline.invoke({'code': code_question, 'rules':rules, 'code_snippets':code_snippets})
+    # Clean response from reasoning
+    match = re.search(r'(?s)</think>\s*(.*)', response) # This regex allows to extract code from the response since Qwen model always returns a reasoning step.
+    response = match.group(1).strip() if match else response.strip()
     answer_state = AnswerState.GENERATED
     return {"generated_response": response, "iterations": iterations, "answer_state": answer_state}
 
-def check_response(state: State):
+def check_response(state: State, hallucinations_evaluator_chain = hallucinations_evaluator_chain, completeness_evaluator_chain = completeness_evaluator_chain):
     code_question=state['code_question']
     retrieved_documents= state['retrieved_documents']
     response= state["generated_response"]
     context = '\n'.join(doc.page_content for doc in retrieved_documents)
-    # Hallucination chain
-    hallucinations_evaluator_chain = (PromptTemplate.from_template(hallucinations_template)
-    | llm.with_structured_output(HallucinationEvaluator, method="json_mode"))
-    # Completeness chain
-    completeness_evaluator_chain = (PromptTemplate.from_template(completeness_template)
-    | llm.with_structured_output(CompletenessEvaluator,  method="json_mode"))
     # Check for hallucinations
     is_response_hallucinated= hallucinations_evaluator_chain.invoke({"context": context, "response": response})
     if is_response_hallucinated.score:

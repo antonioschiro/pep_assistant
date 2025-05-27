@@ -148,7 +148,7 @@ style_evaluator = LangChainStringEvaluator(
         },
         }
     )
-    
+
 def groundness_evaluator(run:Run, example:Example) -> dict:
     '''
     This function is a custom evaluator for the groundness of the generated code.
