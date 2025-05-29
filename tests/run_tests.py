@@ -1,53 +1,58 @@
 from dotenv import load_dotenv
 load_dotenv()
 import os
+import asyncio
 import re
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from langsmith import traceable
-from langsmith.evaluation import LangChainStringEvaluator, evaluate
+from langsmith.evaluation import LangChainStringEvaluator, evaluate, aevaluate
 from datasets import dataset_name
-from utils.graph import compiled_graph, llm, AnswerState
-from groq import RateLimitError
+from utils.graph import compiled_graph, AnswerState
+from langchain_groq import ChatGroq
 from enum import Enum
 # Langsmith configurations
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_PROJECT"] = os.getenv("LANGSMITH_PROJECT")
 os.environ["LANGCHAIN_ENDPOINT"] = os.getenv("LANGSMITH_ENDPOINT")
 os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGSMITH_API_KEY")
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY") 
+# Groq APIKey
+os.environ["GROQ_API_KEY"] = os.getenv("CHATGROQ_APIKEY")
+llm = ChatGroq(model="meta-llama/llama-4-scout-17b-16e-instruct", temperature=0.0) # This will be used for evaluators
 
-# Defining prediction function
-@traceable
-def predict_rag_answer(example:dict) -> dict:
+# Defining prediction functions
+async def fetch_response(example: dict, fetch_context: bool = False) -> dict:
     try:
-        response = compiled_graph.invoke({"code_question": example["question"], "iterations": 0, "answer_state": AnswerState.NOT_GENERATED})
+        response = await compiled_graph.ainvoke({"code_question": example["question"], "iterations": 0, "answer_state": AnswerState.NOT_GENERATED})
+        # Fetch and clean answer
         answer= response.get("generated_response")
-        # Looking for llm markdown
         match = re.search(r"```(?:python)?\n(.+?)\n```", answer, re.DOTALL)
         answer = match.group(1).strip() if match else answer.strip()
-        return {"answer": answer}
-    except RateLimitError as ratelimit_except:
-        print(f"Requests rate limit reached for this model {llm.model_name}:\nError details:\n{ratelimit_except}")
-    except Exception as e:
-        print(f"An unknown exception occurred:\n{e}")
-
-@traceable
-def predict_rag_context_response(example:dict) -> dict:
-    try:
-        response = compiled_graph.invoke({"code_question": example["question"], "iterations": 0, "answer_state": AnswerState.NOT_GENERATED})
+        if not fetch_context:
+            return {"answer": answer}
+        # Fetch context
         docs = response.get("retrieved_documents")
         context = '\n\n'.join(doc.page_content for doc in docs)
-        answer = response.get("generated_response")
-        # Looking for llm markdown
-        match = re.search(r"```(?:python)?\n(.+?)\n```", answer, re.DOTALL)
-        answer = match.group(1).strip() if match else answer.strip()
         return {"answer": answer, "context": context}
-    except RateLimitError as ratelimit_except:
-        print(f"Requests rate limit reached for this model {llm.model_name}:\nError details:\n{ratelimit_except}")
     except Exception as e:
         print(f"An unknown exception occurred:\n{e}")
 
+@traceable
+async def predict_rag_answer(example:dict) -> dict:
+    try:
+        answer: dict = await fetch_response(example = example)
+        return answer
+    except Exception as e:
+        print(f"An unknown exception occurred:\n{e}")
+
+@traceable
+async def predict_rag_context_answer(example:dict) -> dict:
+    try:
+        full_response: dict = await fetch_response(example = example, fetch_context = True)
+        return full_response
+    except Exception as e:
+        print(f"An unknown exception occurred:\n{e}")
 
 # Evaluators
 from langsmith.schemas import Run, Example
@@ -66,7 +71,7 @@ class StyleScore(BaseModel):
     score: Annotated[int, "Style score from 0 to 10"]
     reasoning: Annotated[str, "Reasoning behind the score."]
 
-def adherence_evaluator(run:Run, example:Example) -> dict:
+async def adherence_evaluator(run:Run, example:Example) -> dict:
     '''
     This function is a custom evaluator for the adherence of the generated code.
     Input parameters:
@@ -122,7 +127,7 @@ def adherence_evaluator(run:Run, example:Example) -> dict:
     formatted_output_llm = llm.with_structured_output(AdherenceScore, method="json_mode")
     # Create the evaluation chain
     adherence_test_chain = (adherence_test_prompt | formatted_output_llm)
-    response = adherence_test_chain.invoke({"prediction": prediction, "reference": reference})
+    response = await adherence_test_chain.ainvoke({"prediction": prediction, "reference": reference})
 
     return {"score": response.score, "key": adherence_evaluator.__name__, "reasoning": response.reasoning}
 
@@ -207,23 +212,24 @@ class TestType(Enum):
     CORRECTNESS = "Evaluate the correctness of the answers."
     GROUNDNESS = "Evaluate the groundness of the answers."
     
-def execute_test_suite(test_type:list[TestType], dataset_name = dataset_name) -> None:
+async def execute_test_suite(test_type: TestType|list[TestType], dataset_name = dataset_name) -> None:
+    if isinstance(test_type, TestType):
+        test_type = [test_type]
     try:
         for test in test_type:       
             if test == TestType.CORRECTNESS:
                 print("Correctness tests launch started.")
-                evaluate(
+                await aevaluate(
                     predict_rag_answer,
                     data = dataset_name,
                     evaluators = [adherence_evaluator],
                     experiment_prefix= "correctness_test",
                 )
                 print("Correctness tests terminated.")
-
             if test == TestType.GROUNDNESS:
                 print("Groundness tests launch started.")
-                evaluate(
-                    predict_rag_context_response,
+                await aevaluate(
+                    predict_rag_context_answer,
                     data = dataset_name,
                     evaluators = [groundness_evaluator],
                     experiment_prefix= "hallucination_test"
@@ -231,5 +237,5 @@ def execute_test_suite(test_type:list[TestType], dataset_name = dataset_name) ->
                 print("Groundness tests terminated.")
     except Exception as e:
         print(f"An unknown exception occurred:\n{e}")
-
-execute_test_suite([TestType.CORRECTNESS])
+# Run tests
+asyncio.run(execute_test_suite(TestType.CORRECTNESS))

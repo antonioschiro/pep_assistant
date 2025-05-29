@@ -2,35 +2,45 @@
 from dotenv import load_dotenv
 load_dotenv()
 import os
-from groq import RateLimitError
-from utils.graph import compiled_graph, AnswerState, llm
+import asyncio
+from utils.graph import compiled_graph, AnswerState
 # Langsmith configurations
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_PROJECT"] = os.getenv("LANGSMITH_PROJECT")
 os.environ["LANGCHAIN_ENDPOINT"] = os.getenv("LANGSMITH_ENDPOINT")
 os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGSMITH_API_KEY") 
 
-def pythonize_code(code:str) -> dict:
-    """
-    This function makes the code compliant to PEP standards.
-        Input parameters:
-        code (str): The code snippet to be edited.
-        
-        Returns a dict containing the fixed code. 
-    """
-    try:
-        response = compiled_graph.invoke({"code_question": code, "iterations": 0, "answer_state": AnswerState.NOT_GENERATED})
-        print(response)
-        answer = response.get("generated_response")
+class MultiAgentGraph:
+    def __init__(self, compiled_graph = compiled_graph, max_retry:int = 3):
+        self.graph = compiled_graph
+        self.max_retry = max_retry
 
-        return {"answer": answer}
-    except KeyError:
-        print(f"Answer not generated. More info:\n{e}")
-    except RateLimitError as ratelimit_except:
-        print(f"Requests rate limit reached for this model {llm.model_name}:\nError details:\n{ratelimit_except}")
-    except Exception as e:
-        print(f"An unknown exception occurred:\n{e}")
+    async def ainvoke(self, input_code: str) -> str:
+        """
+        Invoke the graph with the provided input code.
+        
+        Args:
+            input_code (str): The input data to be processed by the graph.
+        
+        Returns:
+            str: The output code processed by the graph.
+        """
+        try:
+            response = await self.graph.ainvoke({"code_question": input_code,
+                                                "iterations": 0,
+                                                "max_iterations": self.max_retry,
+                                                "answer_state": AnswerState.NOT_GENERATED
+                                                })
+            answer = response.get("generated_response")
+            if answer is None:
+                answer = input_code
+            return answer
+        except Exception as e:
+            print(f"An exception occurred:\n{e}")
+
+python_agent = MultiAgentGraph(max_retry=0)
 
 if __name__ == "__main__":
-    input_code = input("Enter the code to be pythonized: ")
-    pythonize_code(input_code)
+    input_code = input("Insert here your Python code: ")
+    response = asyncio.run(python_agent.ainvoke(input_code = input_code))
+    print(response)
