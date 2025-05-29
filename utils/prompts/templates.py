@@ -7,8 +7,9 @@ The document can be defined as **relevant** if it meets **at least one** of thes
 
 Reason explicitly about whether the retrieved document can be used for improve the user code.
 
-Below are examples:
+Below are illustrative examples (DO NOT repeat them in your answer):
 
+---
 Example 1:
 User code:
 def custom_fun(a=3, l):
@@ -69,11 +70,15 @@ Reason:
 The document is **not relevant** because the user code does not involve exception handling. No applicable rule or snippet.
 -> {{"score": false}}
 
-Document:
-{document}
+---
+
+Now, consider the following input:
 
 User Code:
 {code}
+
+Document:
+{document}
 
 Respond **only** in the following JSON format:
 
@@ -203,15 +208,15 @@ Definitions:
 - The code is **hallucinated** if it directly contradicts the context, introduces rules or patterns that are unsupported, or deviates significantly from provided guidance.
 - The code is **grounded** if it is consistent with, inspired by, or reasonably aligned with any part of the context — even if not a perfect match.
 
-Reason explicitly to decide whether the generated code is generally supported by the context or not.
-
 Generated code:
 {response}
 
 Context (rules, style guide, examples):
 {context}
 
-Respond **only** in the following JSON format:
+Reason explicitly to decide whether the generated code is generally supported by the context or not.
+
+Strict rule: do **not** return reasoning. Do not output any explanation. Respond **only** in the following JSON format:
 -If the response is hallucinated return: {{"score": true}}
 -If the response is grounded return: {{"score": false}}
 '''
@@ -231,7 +236,8 @@ This is the user input code:
 {code}
 
 Reason explicitly about whether the generated code is a complete answer to the user input code.
-Respond **only** in the following JSON format:
+
+Strict rule: do **not** return reasoning. Do not output any explanation. Respond **only** in the following JSON format:
 -If the response is complete return: {{"score": true}}
 -If the response is incomplete return: {{"score": false}}
 '''
