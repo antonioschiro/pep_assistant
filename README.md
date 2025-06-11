@@ -41,10 +41,14 @@ rag_folder/
         pep008_document.txt
         ...
 utils/
+    prompts/
+        templates.py
+    evaluators.py
     graph.py
+    models.py
     nodes.py
     scripts.py
-    templates.py
+
 tests/
     data_collection.py
     datasets.py
@@ -84,7 +88,6 @@ tests/
 
 - **PEP Scraping:** Downloads and stores PEP documents in `rag_folder/pep_folder/`.
 - **Code Scraping:** Downloads and stores code from Flask, scikit-learn, and the Python standard library in `rag_folder/codes_folder/`.
-- **Vectorstore Creation:** Chunks and embeds documents, storing them in `chroma.sqlite3` files for fast retrieval.
 - **Vectorstore Creation:** Chunks and embeds documents, storing them in `chroma.sqlite3` files for fast retrieval.
 - **Run the agent:** Fix the style of your code by running `app.py` file.
 
