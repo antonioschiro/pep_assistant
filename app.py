@@ -1,8 +1,13 @@
 
+from unittest.mock import Base
 from dotenv import load_dotenv
 load_dotenv()
 import os
 import asyncio
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
+from typing import Annotated
+import uvicorn
 from utils.graph import compiled_graph, AnswerState
 # Langsmith configurations
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
@@ -10,6 +15,7 @@ os.environ["LANGCHAIN_PROJECT"] = os.getenv("LANGSMITH_PROJECT")
 os.environ["LANGCHAIN_ENDPOINT"] = os.getenv("LANGSMITH_ENDPOINT")
 os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGSMITH_API_KEY") 
 
+# Defining an agent class
 class MultiAgentGraph:
     def __init__(self, compiled_graph = compiled_graph, max_retry:int = 3):
         self.graph = compiled_graph
@@ -40,7 +46,16 @@ class MultiAgentGraph:
 
 python_agent = MultiAgentGraph(max_retry=0)
 
+# API section
+backend = FastAPI()
+
+@backend.post("/")
+async def pythonize(input_code: str) -> str:
+    try:
+        response = await python_agent.ainvoke(input_code = input_code)
+        return response
+    except Exception as e:
+        print(e)
+
 if __name__ == "__main__":
-    input_code = input("Insert here your Python code: ")
-    response = asyncio.run(python_agent.ainvoke(input_code = input_code))
-    print(response)
+    uvicorn.run("app:backend", port = 8000, reload = True)
