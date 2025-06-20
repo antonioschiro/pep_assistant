@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import os
 import asyncio
-from fastapi import FastAPI
+from fastapi import FastAPI, status, HTTPException
 from pydantic import BaseModel, Field
 from typing import Annotated
 import uvicorn
@@ -49,13 +49,17 @@ python_agent = MultiAgentGraph(max_retry=0)
 # API section
 backend = FastAPI()
 
-@backend.post("/")
-async def pythonize(input_code: str) -> str:
+class InputModel(BaseModel):
+    input_code: Annotated[str, Field(title= "The code to be reviewed.")]
+
+@backend.post("/process", status_code = status.HTTP_200_OK)
+async def pythonize(input_model: InputModel) -> dict:
     try:
+        input_code = input_model.input_code
         response = await python_agent.ainvoke(input_code = input_code)
-        return response
+        return {"response": response}
     except Exception as e:
-        print(e)
+        raise HTTPException(status_code = status.HTTP_500_INTERNAL_SERVER_ERROR, detail = str(e))
 
 if __name__ == "__main__":
     uvicorn.run("app:backend", port = 8000, reload = True)
