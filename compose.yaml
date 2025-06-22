@@ -1,0 +1,15 @@
+services:
+  backend-app:
+    image: pep_assistant_app:latest
+    ports:
+      - "8000:8000"
+    depends_on:
+      - model_ai
+    volumes:
+      - .:/app
+  
+  model_ai:
+    provider:
+      type: model
+      options:
+        model: ai/llama3.2:latest

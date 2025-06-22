@@ -1,0 +1,5 @@
+nvidia-nccl-cu12
+torch
+selenium
+beautifulsoup4
+bs4

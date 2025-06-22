@@ -1,0 +1,8 @@
+# Ignoring unnecessary files
+*.pyc
+__pycache__
+tests/
+rag_folder/**/*.txt
+utils/scripts
+myenv
+Dockerfile
