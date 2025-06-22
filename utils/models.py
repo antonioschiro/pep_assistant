@@ -1,5 +1,14 @@
-from langchain_ollama.llms import OllamaLLM
-from langchain_community.chat_models import ChatOllama
+from langchain_openai import ChatOpenAI
+import os
+from dotenv import load_dotenv
+load_dotenv()
+base_url = os.getenv("BASE_URL")
+model_name = os.getenv("DOCKER_MODEL")
 
-code_llm = OllamaLLM(model="qwen3:4b", temperature=0.) # This is used for generating code.
-evaluator_llm = ChatOllama(model="llama3.2:latest", temperature=0.) # This is used for evaluating either retrieved docs and generated responses.
+model_config = {"model": model_name,
+                "temperature": 0.,
+                "base_url": base_url
+}
+
+code_llm = ChatOpenAI(**model_config) # This generate the code.
+evaluator_llm = ChatOpenAI(**model_config) # This evaluate docs and responses.

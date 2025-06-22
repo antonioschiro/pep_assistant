@@ -60,6 +60,3 @@ async def pythonize(input_model: InputModel) -> dict:
         return {"response": response}
     except Exception as e:
         raise HTTPException(status_code = status.HTTP_500_INTERNAL_SERVER_ERROR, detail = str(e))
-
-if __name__ == "__main__":
-    uvicorn.run("app:backend", port = 8000, reload = True)
