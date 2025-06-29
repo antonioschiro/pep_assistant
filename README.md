@@ -30,6 +30,7 @@ It uses Retrieval Augmentated Generation (RAG) to get PEP rules and useful pytho
 .env
 app.py
 requirements.txt
+constraints.txt
 rag_folder/
     codes_folder/
         chroma.sqlite3
@@ -53,6 +54,10 @@ tests/
     data_collection.py
     datasets.py
     run_tests.py
+vendor/
+Dockerfile
+compose.yaml
+.dockerignore
 ```
 
 ## Setup
@@ -102,6 +107,10 @@ tests/
 ## Testing
 
 Test scripts are located in the [`tests/`](tests/) directory.
+
+## Docker
+
+You can run the app in a Docker container using "docker compose up -d --build" 
 
 ## Dependencies
 
